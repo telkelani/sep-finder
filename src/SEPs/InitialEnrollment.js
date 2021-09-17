@@ -17,14 +17,19 @@ function InitialEnrollment() {
     var partB = new Date(partBDate.current.value);
 
     var sameAandB = partA.toDateString() == partB.toDateString();
-
-    if (sameAandB) {
-      if (MAChecked) {
-        setResult('ICEP');
-      } else {
-        setResult('IEP');
+    
+    //Validation
+    if (partADate.current.value != '' && partBDate.current.value != '') {
+      console.log(partADate.current.value);
+      if (sameAandB) {
+        if (MAChecked) {
+          setResult('ICEP');
+        } else {
+          setResult('IEP');
+        }
       }
     } else {
+      setResult('Enter part A and part B date');
     }
   };
 
