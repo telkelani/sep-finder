@@ -23,9 +23,9 @@ function InitialEnrollment() {
 
     let monthDiff = firstOfTheMonth.getUTCMonth() - partB.getUTCMonth(); //Difference in Months
 
+    //3 months before or after
     if (Math.abs(monthDiff) <= 3) {
       valid = true;
-      console.log('uwu');
     }
 
     //Overlap (current Month Oct - Dec)
@@ -33,17 +33,15 @@ function InitialEnrollment() {
       if (partB.getUTCFullYear() == firstOfTheMonth.getUTCFullYear() + 1) {
         if (Math.abs(monthDiff - 12) <= 3) {
           valid = true;
-          console.log('uwu');
         }
       }
     }
 
-    // console.log(firstOfTheMonth.getUTCMonth())
-    if (firstOfTheMonth.getUTCMonth() <= 2) {
+    // Overlap (current Month Feb/Jan)
+    if (firstOfTheMonth.getUTCMonth() <= 1) {
       if (partB.getUTCFullYear() === firstOfTheMonth.getUTCFullYear() - 1) {
         if (Math.abs(monthDiff + 12) <= 3) {
           valid = true;
-          console.log('uwu');
         }
       }
     }
@@ -58,7 +56,6 @@ function InitialEnrollment() {
 
     //Validation
     if (partADate.current.value != '' && partBDate.current.value != '') {
-      console.log(partADate.current.value);
       if (sameAandB) {
         // 3 Months
         var isICIEP = threeOneThree(today, partB);
@@ -72,7 +69,6 @@ function InitialEnrollment() {
         } else {
           setResult('Not In Range');
         }
-        console.log(result);
       }
     } else {
       setResult('Enter part A and part B date');
