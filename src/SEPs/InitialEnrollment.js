@@ -10,23 +10,69 @@ function InitialEnrollment() {
   var [MAChecked, setMAChecked] = useState(false);
   var [MAPDChecked, setMAPDChecked] = useState(true);
   var [PDPChecked, setPDPChecked] = useState(false);
-  var [result, setResult] = useState('');
+  var [result, setResult] = useState(false);
+
+  const threeOneThree = (today, partB) => {
+    let valid = false;
+
+    let firstOfTheMonth = new Date(
+      today.getUTCFullYear(),
+      today.getUTCMonth(),
+      1
+    );
+
+    let monthDiff = firstOfTheMonth.getUTCMonth() - partB.getUTCMonth(); //Difference in Months
+
+    if (Math.abs(monthDiff) <= 3) {
+      valid = true;
+      console.log('uwu');
+    }
+
+    //Overlap (current Month Oct - Dec)
+    if (firstOfTheMonth.getUTCMonth() >= 9) {
+      if (partB.getUTCFullYear() == firstOfTheMonth.getUTCFullYear() + 1) {
+        if (Math.abs(monthDiff - 12) <= 3) {
+          valid = true;
+          console.log('uwu');
+        }
+      }
+    }
+
+    // console.log(firstOfTheMonth.getUTCMonth())
+    if (firstOfTheMonth.getUTCMonth() <= 2) {
+      if (partB.getUTCFullYear() === firstOfTheMonth.getUTCFullYear() - 1) {
+        if (Math.abs(monthDiff + 12) <= 3) {
+          valid = true;
+          console.log('uwu');
+        }
+      }
+    }
+    return valid;
+  };
 
   const isIEPorICEP = () => {
     var partA = new Date(partADate.current.value);
     var partB = new Date(partBDate.current.value);
-
+    var today = new Date(); //months start from 0
     var sameAandB = partA.toDateString() == partB.toDateString();
-    
+
     //Validation
     if (partADate.current.value != '' && partBDate.current.value != '') {
       console.log(partADate.current.value);
       if (sameAandB) {
-        if (MAChecked) {
-          setResult('ICEP');
+        // 3 Months
+        var isICIEP = threeOneThree(today, partB);
+        console.log(isICIEP);
+        if (isICIEP) {
+          if (MAChecked) {
+            setResult('ICEP');
+          } else {
+            setResult('IEP');
+          }
         } else {
-          setResult('IEP');
+          setResult('Not In Range');
         }
+        console.log(result);
       }
     } else {
       setResult('Enter part A and part B date');
@@ -37,10 +83,10 @@ function InitialEnrollment() {
     <div>
       <p>IEP/ICEP</p>
       <label>Part A Start Date </label>
-      <input type="date" ref={partADate} onChange={isIEPorICEP} />
+      <input type="date" ref={partADate} />
       <br />
       <label>Part B Start Date </label>
-      <input type="date" ref={partBDate} onChange={isIEPorICEP} />
+      <input type="date" ref={partBDate} />
       <br />
       <label>MA</label>
       <input
