@@ -15,35 +15,42 @@ function InitialEnrollment() {
   const threeOneThree = (today, partB) => {
     let valid = false;
 
+    console.log(partADate.current)
+
     let firstOfTheMonth = new Date(
       today.getUTCFullYear(),
       today.getUTCMonth(),
       1
     );
 
-    let monthDiff = firstOfTheMonth.getUTCMonth() - partB.getUTCMonth(); //Difference in Months
+    let monthDiff = partB.getUTCMonth() - firstOfTheMonth.getUTCMonth(); //Difference in Months
 
     //3 months before or after
-    if (Math.abs(monthDiff) <= 3) {
-      valid = true;
+    if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear()){
+      if (Math.abs(monthDiff) <= 3) {
+        valid = true;
+      }
     }
+   
 
-    //Overlap (current Month Oct - Dec)
-    if (firstOfTheMonth.getUTCMonth() >= 9) {
-      if (partB.getUTCFullYear() == firstOfTheMonth.getUTCFullYear() + 1) {
-        if (Math.abs(monthDiff - 12) <= 3) {
+    //Overlap on end of year (part B month Oct - Dec)
+    if (partB.getUTCMonth() >= 9) {
+      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() + 1){
+        if (monthDiff <= 11 && monthDiff >= 9) {
           valid = true;
         }
       }
+ 
     }
 
-    // Overlap (current Month Feb/Jan)
-    if (firstOfTheMonth.getUTCMonth() <= 1) {
-      if (partB.getUTCFullYear() === firstOfTheMonth.getUTCFullYear() - 1) {
-        if (Math.abs(monthDiff + 12) <= 3) {
+    //Overlap on the beginning of year (partB month Jan - Mar)
+    if (partB.getUTCMonth() <= 2) {
+      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() - 1){
+        if (Math.abs(monthDiff) <= 11 && Math.abs(monthDiff) >= 9) {
           valid = true;
         }
       }
+      
     }
     return valid;
   };
@@ -51,13 +58,12 @@ function InitialEnrollment() {
   const isIEPorICEP = () => {
     var partA = new Date(partADate.current.value);
     var partB = new Date(partBDate.current.value);
-    var today = new Date(); //months start from 0
+    var today = new Date(2020, 8, 1); //months start from 0
     var sameAandB = partA.toDateString() == partB.toDateString();
 
     //Validation
     if (partADate.current.value != '' && partBDate.current.value != '') {
       if (sameAandB) {
-        // 3 Months
         var isICIEP = threeOneThree(today, partB);
         console.log(isICIEP);
         if (isICIEP) {
@@ -67,7 +73,7 @@ function InitialEnrollment() {
             setResult('IEP');
           }
         } else {
-          setResult('Not In Range');
+          setResult('Not in IEP/ICEP');
         }
       }
     } else {
