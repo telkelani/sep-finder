@@ -1,8 +1,12 @@
 import React, { useRef, useState } from 'react';
+import DatePicker from 'react-datepicker'
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 function InitialEnrollment() {
-  var partADate = useRef();
-  var partBDate = useRef();
+  var [partA, setPartA] = useState(null)
+  var [partB, setPartB] = useState(null)
   var MARadio = useRef();
   var MAPDRadio = useRef();
   var PDPRadio = useRef();
@@ -15,8 +19,6 @@ function InitialEnrollment() {
   const threeOneThree = (today, partB) => {
     let valid = false;
 
-    console.log(partADate.current)
-
     let firstOfTheMonth = new Date(
       today.getUTCFullYear(),
       today.getUTCMonth(),
@@ -24,9 +26,10 @@ function InitialEnrollment() {
     );
 
     let monthDiff = partB.getUTCMonth() - firstOfTheMonth.getUTCMonth(); //Difference in Months
+    console.log(monthDiff)
 
-    //3 months before or after
     if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear()){
+      
       if (Math.abs(monthDiff) <= 3) {
         valid = true;
       }
@@ -34,7 +37,7 @@ function InitialEnrollment() {
    
 
     //Overlap on end of year (part B month Oct - Dec)
-    if (partB.getUTCMonth() >= 9) {
+    else if (partB.getUTCMonth() >= 9) {
       if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() + 1){
         if (monthDiff <= 11 && monthDiff >= 9) {
           valid = true;
@@ -44,7 +47,7 @@ function InitialEnrollment() {
     }
 
     //Overlap on the beginning of year (partB month Jan - Mar)
-    if (partB.getUTCMonth() <= 2) {
+    else if (partB.getUTCMonth() <= 2) {
       if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() - 1){
         if (Math.abs(monthDiff) <= 11 && Math.abs(monthDiff) >= 9) {
           valid = true;
@@ -56,16 +59,15 @@ function InitialEnrollment() {
   };
 
   const isIEPorICEP = () => {
-    var partA = new Date(partADate.current.value);
-    var partB = new Date(partBDate.current.value);
-    var today = new Date(2020, 8, 1); //months start from 0
+
+    var today = new Date(2022,2,1); //months start from 0
     var sameAandB = partA.toDateString() == partB.toDateString();
 
     //Validation
-    if (partADate.current.value != '' && partBDate.current.value != '') {
+    if (partA != null && partB != null) {
       if (sameAandB) {
         var isICIEP = threeOneThree(today, partB);
-        console.log(isICIEP);
+        
         if (isICIEP) {
           if (MAChecked) {
             setResult('ICEP');
@@ -85,11 +87,9 @@ function InitialEnrollment() {
     <div>
       <p>IEP/ICEP</p>
       <label>Part A Start Date </label>
-      <input type="date" ref={partADate} />
-      <br />
+      <DatePicker selected={partA} onChange={(date) => setPartA(date)} />
       <label>Part B Start Date </label>
-      <input type="date" ref={partBDate} />
-      <br />
+      <DatePicker selected={partB} onChange={(date) => setPartB(date)} />
       <label>MA</label>
       <input
         id="MA"
