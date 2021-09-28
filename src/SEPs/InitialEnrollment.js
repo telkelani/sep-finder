@@ -125,9 +125,9 @@ function InitialEnrollment() {
     <div>
       <p>IEP/ICEP</p>
       <label>Part A Start Date </label>
-      <DatePicker selected={partA} onChange={(date) => setPartA(date)} dateFormat="MM/yyyy" showMonthYearPicker />
+      <DatePicker selected={partA} onChange={(date) => setPartA(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
       <label>Part B Start Date </label>
-      <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/yyyy" showMonthYearPicker />
+      <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
       <br />
       <p>Note: All dates are on the first of the month</p>
       <label>MA</label>
