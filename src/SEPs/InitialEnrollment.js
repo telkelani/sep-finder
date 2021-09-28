@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 function InitialEnrollment() {
   var [partA, setPartA] = useState(null)
   var [partB, setPartB] = useState(null)
-  var today = new Date(2021,9,1); //months start from 0
+  var [today, setToday] = useState(new Date())
   var MARadio = useRef();
   var MAPDRadio = useRef();
   var PDPRadio = useRef();
@@ -130,6 +130,10 @@ function InitialEnrollment() {
       <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
       <br />
       <p>Note: All dates are on the first of the month</p>
+
+      <label>Current Date</label>
+      <DatePicker selected={today} onChange={(date) => setToday(date)} />
+      <br />
       <label>MA</label>
       <input
         id="MA"
