@@ -60,11 +60,12 @@ function InitialEnrollment() {
 
   const isIEPorICEP = () => {
 
-    var today = new Date(2022,2,1); //months start from 0
+    var today = new Date(2021,9,1); //months start from 0
     var sameAandB = partA.toDateString() == partB.toDateString();
 
     //Validation
     if (partA != null && partB != null) {
+      console.log(partA)
       if (sameAandB) {
         var isICIEP = threeOneThree(today, partB);
         
@@ -77,6 +78,35 @@ function InitialEnrollment() {
         } else {
           setResult('Not in IEP/ICEP');
         }
+      }
+
+      //if a & b not the same date
+      else {
+        let valid = false
+        let monthDiff = partB.getUTCMonth() - today.getUTCMonth()
+        let sameYear = partB.getUTCFullYear() == today.getUTCFullYear()
+        let partBYearAfter = partB.getUTCFullYear() == today.getUTCFullYear() + 1
+
+    
+        if (sameYear) {
+          if (monthDiff <= 3 && monthDiff >= 0){
+            valid = true
+          }
+        }
+
+        else if (partBYearAfter){
+          console.log(monthDiff)
+          if (Math.abs(monthDiff) >= 9 && Math.abs(monthDiff) <= 11){
+            valid = true
+          }
+        }
+        
+        if (valid){
+          setResult('ICEP')
+        }
+
+      
+
       }
     } else {
       setResult('Enter part A and part B date');
