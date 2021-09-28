@@ -88,10 +88,11 @@ function InitialEnrollment() {
   const isIEPorICEP = () => {
 
     
-    var sameAandB = partA.toDateString() == partB.toDateString();
+    
 
     //Validation
     if (partA != null && partB != null) {
+      var sameAandB = partA.toDateString() == partB.toDateString();
       console.log(partA)
       if (sameAandB) {
         var isICIEP = threeOneThree(today, partB);
@@ -129,7 +130,6 @@ function InitialEnrollment() {
       <label>Part B Start Date </label>
       <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
       <br />
-      <p>Note: All dates are on the first of the month</p>
 
       <label>Current Date</label>
       <DatePicker selected={today} onChange={(date) => setToday(date)} />
