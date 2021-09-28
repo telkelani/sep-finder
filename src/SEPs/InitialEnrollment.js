@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
-
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
 import 'react-datepicker/dist/react-datepicker.css';
+import './IEP.css'
 
 function InitialEnrollment() {
   var [partA, setPartA] = useState(null);
@@ -20,16 +23,12 @@ function InitialEnrollment() {
   const threeOneThree = (today, partB) => {
     let valid = false;
 
-    let firstOfTheMonth = new Date(
-      today.getUTCFullYear(),
-      today.getUTCMonth(),
-      1
-    );
+    let monthDiff = partB.getUTCMonth() - today.getUTCMonth(); //Difference in Months
+    let sameYear = today.getUTCFullYear() == partB.getUTCFullYear();
+    let todayYearAfterB = today.getUTCFullYear() == partB.getUTCFullYear() + 1;
+    let todayYearBeforeB = today.getUTCFullYear() == partB.getUTCFullYear() - 1;
 
-    let monthDiff = partB.getUTCMonth() - firstOfTheMonth.getUTCMonth(); //Difference in Months
-    console.log(monthDiff);
-
-    if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear()) {
+    if (sameYear) {
       if (Math.abs(monthDiff) <= 3) {
         valid = true;
       }
@@ -37,7 +36,7 @@ function InitialEnrollment() {
 
     //Overlap on end of year (part B month Oct - Dec)
     else if (partB.getUTCMonth() >= 9) {
-      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() + 1) {
+      if (todayYearAfterB) {
         if (monthDiff <= 11 && monthDiff >= 9) {
           valid = true;
         }
@@ -46,7 +45,7 @@ function InitialEnrollment() {
 
     //Overlap on the beginning of year (partB month Jan - Mar)
     else if (partB.getUTCMonth() <= 2) {
-      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() - 1) {
+      if (todayYearBeforeB) {
         if (Math.abs(monthDiff) <= 11 && Math.abs(monthDiff) >= 9) {
           valid = true;
         }
@@ -80,7 +79,7 @@ function InitialEnrollment() {
     //Validation
     if (partA != null && partB != null) {
       var sameAandB = partA.toDateString() == partB.toDateString();
-      console.log(partA);
+
       if (sameAandB) {
         var isICIEP = threeOneThree(today, partB);
 
@@ -114,38 +113,75 @@ function InitialEnrollment() {
         }
       }
     } else {
-      setResult('Enter part A and part B date');
+      console.log(partD);
+      if (partD == null){
+        setResult('Enter Part D date')
+        return
+      }
+      if (PDPChecked) {
+        let IEP = threeOneThree(today, partD);
+        if (IEP) {
+          setResult('IEP');
+        } else {
+          setResult('Check for SEP');
+        }
+      } else {
+        setResult('Enter part A and part B date');
+      }
     }
   };
 
   return (
     <div>
-      <p>IEP/ICEP</p>
-      <label>Part A Start Date </label>
-      <DatePicker
-        selected={partA}
-        onChange={(date) => setPartA(date)}
-        dateFormat="MM/01/yyyy"
-        showMonthYearPicker
-      />
-      <label>Part B Start Date </label>
-      <DatePicker
-        selected={partB}
-        onChange={(date) => setPartB(date)}
-        dateFormat="MM/01/yyyy"
-        showMonthYearPicker
-      />
-      <br />
-      <label>Part D Date</label>
-      <DatePicker
-        selected={partD}
-        onChange={(date) => setPartD(date)}
-        dateFormat="MM/01/yyyy"
-        showMonthYearPicker
-      />
-      <label>Current Date</label>
-      <DatePicker selected={today} onChange={(date) => setToday(date)} />
-      <br />
+      <div className="iep-title-container">
+        <h2>IEP/ICEP</h2>
+      </div>
+      <Container>
+        <Row>
+          <Col>
+            <div className="date">
+              <label>Part A Start Date </label>
+              <DatePicker
+              selected={partA}
+              onChange={(date) => setPartA(date)}
+              dateFormat="MM/01/yyyy"
+              showMonthYearPicker
+              />
+            </div>
+          </Col>
+        <div className="date">
+          <label>Part B Start Date </label>
+          <DatePicker
+          selected={partB}
+          onChange={(date) => setPartB(date)}
+          dateFormat="MM/01/yyyy"
+          showMonthYearPicker
+          />
+        </div>
+        </Row>
+        
+        <Row>
+          <Col>
+            <div className="date">
+              <label>Part D Date</label>
+              <DatePicker
+              selected={partD}
+              onChange={(date) => setPartD(date)}
+              dateFormat="MM/01/yyyy"
+              showMonthYearPicker
+              />
+            </div>
+          </Col>
+          
+          <Col>
+            <div className="date">
+              <label>Current Date</label>
+              <DatePicker selected={today} onChange={(date) => setToday(date)} />
+            </div>
+          </Col>
+        </Row>
+      </Container>
+
 
       <label>MA</label>
       <input
