@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
-import DatePicker from 'react-datepicker'
+import DatePicker from 'react-datepicker';
 
-import "react-datepicker/dist/react-datepicker.css";
-
+import 'react-datepicker/dist/react-datepicker.css';
 
 function InitialEnrollment() {
-  var [partA, setPartA] = useState(null)
-  var [partB, setPartB] = useState(null)
-  var [today, setToday] = useState(new Date())
+  var [partA, setPartA] = useState(null);
+  var [partB, setPartB] = useState(null);
+  var [partD, setPartD] = useState(null);
+  var [today, setToday] = useState(new Date());
   var MARadio = useRef();
   var MAPDRadio = useRef();
   var PDPRadio = useRef();
@@ -16,7 +16,6 @@ function InitialEnrollment() {
   var [MAPDChecked, setMAPDChecked] = useState(true);
   var [PDPChecked, setPDPChecked] = useState(false);
   var [result, setResult] = useState(false);
-
 
   const threeOneThree = (today, partB) => {
     let valid = false;
@@ -28,75 +27,63 @@ function InitialEnrollment() {
     );
 
     let monthDiff = partB.getUTCMonth() - firstOfTheMonth.getUTCMonth(); //Difference in Months
-    console.log(monthDiff)
+    console.log(monthDiff);
 
-    if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear()){
-      
+    if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear()) {
       if (Math.abs(monthDiff) <= 3) {
         valid = true;
       }
     }
-    
-   
 
     //Overlap on end of year (part B month Oct - Dec)
     else if (partB.getUTCMonth() >= 9) {
-      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() + 1){
+      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() + 1) {
         if (monthDiff <= 11 && monthDiff >= 9) {
           valid = true;
         }
       }
- 
     }
 
     //Overlap on the beginning of year (partB month Jan - Mar)
     else if (partB.getUTCMonth() <= 2) {
-      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() - 1){
+      if (firstOfTheMonth.getUTCFullYear() == partB.getUTCFullYear() - 1) {
         if (Math.abs(monthDiff) <= 11 && Math.abs(monthDiff) >= 9) {
           valid = true;
         }
       }
-      
     }
     return valid;
   };
 
-  
   const threeMonthsPrior = () => {
-    let valid = false
-    let monthDiff =  today.getUTCMonth() - partB.getUTCMonth()
-    let sameYear = partB.getUTCFullYear() == today.getUTCFullYear()
-    let partBYearAfter = partB.getUTCFullYear() == today.getUTCFullYear() + 1
+    let valid = false;
+    let monthDiff = today.getUTCMonth() - partB.getUTCMonth();
+    let sameYear = partB.getUTCFullYear() == today.getUTCFullYear();
+    let partBYearAfter = partB.getUTCFullYear() == today.getUTCFullYear() + 1;
 
     if (sameYear) {
-      if (monthDiff <= 3 && monthDiff >= 0){
+      if (monthDiff <= 3 && monthDiff >= 0) {
         if (partB.toDateString() != today.toDateString()) {
-          valid = true
+          valid = true;
         }
       }
-    }
-
-    else if (partBYearAfter){
-      console.log(monthDiff)
-      if (Math.abs(monthDiff) >= 9 && Math.abs(monthDiff) <= 11){
-        valid = true
+    } else if (partBYearAfter) {
+      console.log(monthDiff);
+      if (Math.abs(monthDiff) >= 9 && Math.abs(monthDiff) <= 11) {
+        valid = true;
       }
     }
-    return valid
-  }
+    return valid;
+  };
 
   const isIEPorICEP = () => {
-
-    
-    
-
     //Validation
     if (partA != null && partB != null) {
       var sameAandB = partA.toDateString() == partB.toDateString();
-      console.log(partA)
+      console.log(partA);
       if (sameAandB) {
         var isICIEP = threeOneThree(today, partB);
-        
+
         if (isICIEP) {
           if (MAChecked) {
             setResult('ICEP');
@@ -110,12 +97,21 @@ function InitialEnrollment() {
 
       //if a & b not the same date
       else {
-        let ICEP = threeMonthsPrior();
-        if (ICEP && (MAChecked || MAPDChecked) ){ setResult('ICEP')}
-        else {setResult('Check SEP')}
-
-      
-
+        if (PDPChecked) {
+          let IEP = threeOneThree(today, partD);
+          if (IEP) {
+            setResult('IEP');
+          } else {
+            setResult('Check for SEP');
+          }
+        } else {
+          let ICEP = threeMonthsPrior();
+          if (ICEP && (MAChecked || MAPDChecked)) {
+            setResult('ICEP');
+          } else {
+            setResult('Check SEP');
+          }
+        }
       }
     } else {
       setResult('Enter part A and part B date');
@@ -126,14 +122,31 @@ function InitialEnrollment() {
     <div>
       <p>IEP/ICEP</p>
       <label>Part A Start Date </label>
-      <DatePicker selected={partA} onChange={(date) => setPartA(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
+      <DatePicker
+        selected={partA}
+        onChange={(date) => setPartA(date)}
+        dateFormat="MM/01/yyyy"
+        showMonthYearPicker
+      />
       <label>Part B Start Date </label>
-      <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/01/yyyy" showMonthYearPicker />
+      <DatePicker
+        selected={partB}
+        onChange={(date) => setPartB(date)}
+        dateFormat="MM/01/yyyy"
+        showMonthYearPicker
+      />
       <br />
-
+      <label>Part D Date</label>
+      <DatePicker
+        selected={partD}
+        onChange={(date) => setPartD(date)}
+        dateFormat="MM/01/yyyy"
+        showMonthYearPicker
+      />
       <label>Current Date</label>
       <DatePicker selected={today} onChange={(date) => setToday(date)} />
       <br />
+
       <label>MA</label>
       <input
         id="MA"
