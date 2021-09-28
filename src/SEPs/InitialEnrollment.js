@@ -110,7 +110,7 @@ function InitialEnrollment() {
       //if a & b not the same date
       else {
         let ICEP = threeMonthsPrior();
-        if (ICEP && MAChecked){ setResult('ICEP')}
+        if (ICEP && (MAChecked || MAPDChecked) ){ setResult('ICEP')}
         else {setResult('Check SEP')}
 
       
@@ -128,6 +128,8 @@ function InitialEnrollment() {
       <DatePicker selected={partA} onChange={(date) => setPartA(date)} dateFormat="MM/yyyy" showMonthYearPicker />
       <label>Part B Start Date </label>
       <DatePicker selected={partB} onChange={(date) => setPartB(date)} dateFormat="MM/yyyy" showMonthYearPicker />
+      <br />
+      <p>Note: All dates are on the first of the month</p>
       <label>MA</label>
       <input
         id="MA"
