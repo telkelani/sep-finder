@@ -7,6 +7,35 @@
   font-family: 'Overpass Mono', monospace;
 }
 
-.date {
-  display: inline;
+.radio-button {
+  padding: 15px 30px;
+  margin: 0 30px;
+  width: fit-content;
+  background-color: rgb(184, 32, 32);
+  border-radius: 23px 23px 23px 23px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-family: 'Overpass Mono', monospace;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 20px;
+}
+
+#submit-button {
+  border-radius: 23px 23px 23px 23px;
+  border-style: none;
+  background: rgb(56, 238, 117);
+  color: rgb(4, 55, 221);
+  padding: 20px 20px;
+  width: 10%;
+  font-family: 'Overpass Mono', monospace;
+}
+
+#submit-button:hover {
+  cursor: pointer;
 }

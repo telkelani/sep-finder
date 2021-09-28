@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import 'react-datepicker/dist/react-datepicker.css';
-import './IEP.css'
+import './IEP.css';
 
 function InitialEnrollment() {
   var [partA, setPartA] = useState(null);
@@ -104,6 +104,11 @@ function InitialEnrollment() {
             setResult('Check for SEP');
           }
         } else {
+          if (partA == null && partB == null) {
+            setResult('Enter part A and part B date');
+            return
+          }
+          
           let ICEP = threeMonthsPrior();
           if (ICEP && (MAChecked || MAPDChecked)) {
             setResult('ICEP');
@@ -113,10 +118,9 @@ function InitialEnrollment() {
         }
       }
     } else {
-      console.log(partD);
-      if (partD == null){
-        setResult('Enter Part D date')
-        return
+      if (partD == null) {
+        setResult('Enter Part D date');
+        return;
       }
       if (PDPChecked) {
         let IEP = threeOneThree(today, partD);
@@ -136,96 +140,103 @@ function InitialEnrollment() {
       <div className="iep-title-container">
         <h2>IEP/ICEP</h2>
       </div>
-      <Container>
-        <Row>
-          <Col>
-            <div className="date">
-              <label>Part A Start Date </label>
-              <DatePicker
-              selected={partA}
-              onChange={(date) => setPartA(date)}
-              dateFormat="MM/01/yyyy"
-              showMonthYearPicker
-              />
-            </div>
-          </Col>
+
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="date">
+          <label>Part A Start Date </label>
+          <DatePicker
+            selected={partA}
+            onChange={(date) => setPartA(date)}
+            dateFormat="MM/01/yyyy"
+            showMonthYearPicker
+          />
+        </div>
+
         <div className="date">
           <label>Part B Start Date </label>
           <DatePicker
-          selected={partB}
-          onChange={(date) => setPartB(date)}
-          dateFormat="MM/01/yyyy"
-          showMonthYearPicker
+            selected={partB}
+            onChange={(date) => setPartB(date)}
+            dateFormat="MM/01/yyyy"
+            showMonthYearPicker
           />
         </div>
-        </Row>
-        
-        <Row>
-          <Col>
-            <div className="date">
-              <label>Part D Date</label>
-              <DatePicker
-              selected={partD}
-              onChange={(date) => setPartD(date)}
-              dateFormat="MM/01/yyyy"
-              showMonthYearPicker
-              />
-            </div>
-          </Col>
-          
-          <Col>
-            <div className="date">
-              <label>Current Date</label>
-              <DatePicker selected={today} onChange={(date) => setToday(date)} />
-            </div>
-          </Col>
-        </Row>
-      </Container>
 
+        <div className="date">
+          <label>Part D Date</label>
+          <DatePicker
+            selected={partD}
+            onChange={(date) => setPartD(date)}
+            dateFormat="MM/01/yyyy"
+            showMonthYearPicker
+          />
+        </div>
 
-      <label>MA</label>
-      <input
-        id="MA"
-        type="radio"
-        name="plan-type"
-        ref={MARadio}
-        onClick={() => {
-          setMAChecked(true);
-          setMAPDChecked(false);
-          setPDPChecked(false);
+        <div className="date">
+          <label>Current Date</label>
+          <DatePicker selected={today} onChange={(date) => setToday(date)} />
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '50px',
         }}
-      />
-      <br />
-      <label>MAPD</label>
-      <input
-        id="MAPD"
-        type="radio"
-        name="plan-type"
-        ref={MAPDRadio}
-        checked={MAPDChecked}
-        onChange={() => {
-          setMAChecked(false);
-          setMAPDChecked(true);
-          setPDPChecked(false);
-        }}
-      />
-      <br />
-      <label>PDP</label>
-      <input
-        id="PDP"
-        type="radio"
-        name="plan-type"
-        ref={PDPRadio}
-        onClick={() => {
-          setMAChecked(false);
-          setMAPDChecked(false);
-          setPDPChecked(true);
-        }}
-      />
-      <br />
-      <button type="submit" onClick={isIEPorICEP}>
-        Submit
-      </button>
+      >
+        <div className="radio-button">
+          <label>MA</label>
+          <input
+            id="MA"
+            type="radio"
+            name="plan-type"
+            ref={MARadio}
+            onClick={() => {
+              setMAChecked(true);
+              setMAPDChecked(false);
+              setPDPChecked(false);
+            }}
+          />
+        </div>
+
+        <div className="radio-button">
+          <label>MAPD</label>
+          <input
+            id="MAPD"
+            type="radio"
+            name="plan-type"
+            ref={MAPDRadio}
+            checked={MAPDChecked}
+            onChange={() => {
+              setMAChecked(false);
+              setMAPDChecked(true);
+              setPDPChecked(false);
+            }}
+          />
+        </div>
+
+        <div className="radio-button">
+          <label>PDP</label>
+          <input
+            id="PDP"
+            type="radio"
+            name="plan-type"
+            ref={PDPRadio}
+            onClick={() => {
+              setMAChecked(false);
+              setMAPDChecked(false);
+              setPDPChecked(true);
+            }}
+          />
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button id="submit-button" type="submit" onClick={isIEPorICEP}>
+          Submit
+        </button>
+      </div>
 
       <h1>{result}</h1>
 
