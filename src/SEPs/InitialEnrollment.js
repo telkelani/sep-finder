@@ -1,8 +1,5 @@
 import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import 'react-datepicker/dist/react-datepicker.css';
 import './IEP.css';
 
@@ -18,7 +15,33 @@ function InitialEnrollment() {
   var [MAChecked, setMAChecked] = useState(false);
   var [MAPDChecked, setMAPDChecked] = useState(true);
   var [PDPChecked, setPDPChecked] = useState(false);
-  var [result, setResult] = useState(false);
+  var [result, setResult] = useState(null);
+
+  const ShowResult = () => {
+    const resultStyle = {
+      color: 'red',
+    };
+
+    if (result == null) {
+      return null;
+    }
+
+    if (result == 'IEP 🎉' || result == 'ICEP 🎉') {
+      resultStyle.color = '#00fc43'; //green
+    }
+    else if (result == 'Check for SEP 😳'){
+      resultStyle.color = '#eba836' //yellow
+    }
+    
+    else {
+      resultStyle.color = '#f23400' //red
+    }
+    return (
+      <div className="result-container">
+        <h1 style={resultStyle}>{result}</h1>
+      </div>
+    );
+  };
 
   const threeOneThree = (today, partB) => {
     let valid = false;
@@ -56,7 +79,7 @@ function InitialEnrollment() {
 
   const threeMonthsPrior = () => {
     let valid = false;
-    let monthDiff = today.getUTCMonth() - partB.getUTCMonth();
+    let monthDiff = partB.getUTCMonth() - today.getUTCMonth();
     let sameYear = partB.getUTCFullYear() == today.getUTCFullYear();
     let partBYearAfter = partB.getUTCFullYear() == today.getUTCFullYear() + 1;
 
@@ -85,12 +108,12 @@ function InitialEnrollment() {
 
         if (isICIEP) {
           if (MAChecked) {
-            setResult('ICEP');
+            setResult('ICEP 🎉');
           } else {
-            setResult('IEP');
+            setResult('IEP 🎉');
           }
         } else {
-          setResult('Not in IEP/ICEP');
+          setResult('Not in IEP/ICEP 😢');
         }
       }
 
@@ -99,38 +122,50 @@ function InitialEnrollment() {
         if (PDPChecked) {
           let IEP = threeOneThree(today, partD);
           if (IEP) {
-            setResult('IEP');
+            setResult('IEP 🎉');
           } else {
-            setResult('Check for SEP');
+            setResult('Check for SEP 😳');
           }
         } else {
           if (partA == null && partB == null) {
             setResult('Enter part A and part B date');
-            return
+            return;
           }
-          
+
           let ICEP = threeMonthsPrior();
           if (ICEP && (MAChecked || MAPDChecked)) {
-            setResult('ICEP');
+            setResult('ICEP 🎉');
           } else {
-            setResult('Check SEP');
+            setResult('Check for SEP 😳');
           }
         }
       }
     } else {
+      if (partA == null && partB == null) {
+        setResult('Enter part A and B Date 😡');
+        return;
+      }
+
+      if (partA == null) {
+        setResult('Enter part A Date 😡');
+        return;
+      }
+
+      if (partB == null) {
+        setResult('Enter part B Date 😡');
+        return;
+      }
       if (partD == null) {
-        setResult('Enter Part D date');
+        setResult('Enter Part D date 😡');
         return;
       }
       if (PDPChecked) {
         let IEP = threeOneThree(today, partD);
         if (IEP) {
-          setResult('IEP');
+          setResult('IEP 🎉');
         } else {
-          setResult('Check for SEP');
+          setResult('Check for SEP 😳');
         }
-      } else {
-        setResult('Enter part A and part B date');
       }
     }
   };
@@ -138,13 +173,14 @@ function InitialEnrollment() {
   return (
     <div>
       <div className="iep-title-container">
-        <h2>IEP/ICEP</h2>
+        <h2>IEP/ICEP Calculator</h2>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div className="date">
-          <label>Part A Start Date </label>
+          <label className="date-label">Part A Start Date </label>
           <DatePicker
+            className="date-input"
             selected={partA}
             onChange={(date) => setPartA(date)}
             dateFormat="MM/01/yyyy"
@@ -153,8 +189,9 @@ function InitialEnrollment() {
         </div>
 
         <div className="date">
-          <label>Part B Start Date </label>
+          <label className="date-label">Part B Start Date </label>
           <DatePicker
+            className="date-input"
             selected={partB}
             onChange={(date) => setPartB(date)}
             dateFormat="MM/01/yyyy"
@@ -163,8 +200,9 @@ function InitialEnrollment() {
         </div>
 
         <div className="date">
-          <label>Part D Date</label>
+          <label className="date-label">Part D Date</label>
           <DatePicker
+            className="date-input"
             selected={partD}
             onChange={(date) => setPartD(date)}
             dateFormat="MM/01/yyyy"
@@ -173,8 +211,12 @@ function InitialEnrollment() {
         </div>
 
         <div className="date">
-          <label>Current Date</label>
-          <DatePicker selected={today} onChange={(date) => setToday(date)} />
+          <label className="date-label">Current Date</label>
+          <DatePicker
+            className="date-input"
+            selected={today}
+            onChange={(date) => setToday(date)}
+          />
         </div>
       </div>
 
@@ -237,10 +279,7 @@ function InitialEnrollment() {
           Submit
         </button>
       </div>
-
-      <h1>{result}</h1>
-
-      <p>OEP-New</p>
+      <ShowResult />
     </div>
   );
 }

@@ -6,9 +6,7 @@ import AnnualOpenEnrollment from './SEPs/AnnualOpenEnrollment';
 export default function App() {
   return (
     <div>
-      <h1>SEP Finder</h1>
       <InitialEnrollment />
-      <AnnualOpenEnrollment />
     </div>
   );
 }

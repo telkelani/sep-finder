@@ -1,17 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Overpass+Mono&display=swap');
-
+body{
+  background-color: rgba(47, 56, 179, 0.377);
+}
 .iep-title-container {
   display: flex;
   justify-content: center;
-  font-size: large;
+  font-size: xx-large;
   font-family: 'Overpass Mono', monospace;
+  margin-bottom: 50px;
+  color:aquamarine;
 }
 
 .radio-button {
   padding: 15px 30px;
   margin: 0 30px;
   width: fit-content;
-  background-color: rgb(184, 32, 32);
+  background-color: rgb(17, 158, 38);
   border-radius: 23px 23px 23px 23px;
   display: flex;
   justify-content: space-between;
@@ -34,8 +38,47 @@
   padding: 20px 20px;
   width: 10%;
   font-family: 'Overpass Mono', monospace;
+  font-size: large;
 }
 
 #submit-button:hover {
   cursor: pointer;
 }
+
+.date{
+  display: flex;
+  background: rgba(134, 41, 41, 0.637);
+  padding: 25px 25px;
+  border-radius: 23px 23px 23px 23px;
+  margin-right: 10px;
+}
+.date-label{
+  width: 70%;
+  font-family: 'Overpass Mono', monospace;
+  color: rgb(13, 192, 109);
+}
+.date-input{
+  border-radius: 23px 23px 23px 23px;
+  margin-left: 50px;
+  border-style: none;
+  width: 70%;
+  text-align: center;
+  font-family: 'Overpass Mono', monospace;
+  font-size: large;
+
+}
+
+.result-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  width: 50%;
+  margin-left: 25%;
+  background: rgb(19, 199, 199);
+  text-align: center;
+  border-radius: 23px 23px 23px 23px;
+  font-family: 'Overpass Mono', monospace;
+
+}
+
